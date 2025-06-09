@@ -1,0 +1,7 @@
+streamlit
+pandas
+requests
+matplotlib
+fake-useragent
+xlsxwriter
+openpyxl
