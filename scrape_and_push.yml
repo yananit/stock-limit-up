@@ -2,36 +2,34 @@ name: Scrape and Push Data
 
 on:
   schedule:
-    - cron: '1 7 * * *'   # 每天下午 15:01（北京时间）
-  workflow_dispatch:       # 支持手动运行
+    - cron: '10 7 * * 1-5'  # 周一到周五，北京时间15:10执行一次
+  workflow_dispatch:  # 可手动运行
 
 jobs:
-  scrape:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: 克隆仓库
         uses: actions/checkout@v3
 
-      - name: Set up Python
+      - name: 设置 Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
 
-      - name: Install dependencies
+      - name: 安装依赖
         run: |
           pip install -r requirements.txt
 
-      - name: Run scraper
+      - name: 执行爬虫程序
         run: |
           python stock_scraper/main.py
 
-      - name: Commit and push updates
+      - name: 提交更新的Excel
         run: |
-          git config --global user.email "2627768814@qq.com"
-          git config --global user.name "yananit"
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
           git add .
-          git commit -m "自动抓取并更新 Excel"
+          git commit -m "自动更新涨停股Excel文件"
           git push
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
